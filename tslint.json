@@ -1,18 +1,18 @@
 {
-  "defaultSeverity": "error",
-  "extends": ["tslint:recommended"],
-  "jsRules": {
-    "no-unused-expression": true
-  },
+  "extends": ["@wx-fc/tslint-config/react", "tslint-config-eslint/prettier"],
   "rules": {
-    "quotemark": [true, "single"],
-    "member-access": [false],
-    "ordered-imports": [false],
-    "max-line-length": [true, 150],
-    "member-ordering": [false],
-    "interface-name": [false],
-    "arrow-parens": false,
-    "object-literal-sort-keys": false
+    "jsx-no-lambda": false,
+    "ordered-imports": [
+      true,
+      {
+        "grouped-imports": true,
+        "import-sources-order": "lowercase-first",
+        "named-imports-order": "lowercase-last",
+        "groups": ["^(@[^/]|[^@.])", "^(@/)", "^(../)+", "^(?!\\./.*\\.less)"]
+      }
+    ]
   },
-  "rulesDirectory": []
+  "linterOptions": {
+    "exclude": ["**/*.d.ts"]
+  }
 }
