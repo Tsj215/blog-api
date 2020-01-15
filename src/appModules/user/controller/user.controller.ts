@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch } from "@nestjs/common";
 
 import { ProfileEntity } from "../entity/profile.entity";
 import { UserService } from "../service/user.service";
@@ -7,19 +7,19 @@ import { UserService } from "../service/user.service";
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get("tsj")
-  test() {
-    return this.userService.createUser();
-  }
-
-  @Get("get3")
-  get3() {
-    return this.userService.getUser();
+  @Patch("update")
+  update(@Body() profile: Partial<ProfileEntity>) {
+    return this.userService.updateProfile(profile);
   }
 
   @Get("profile/:id")
   async loadProfile(@Param() param): Promise<{ data: ProfileEntity }> {
     const resp = await this.userService.getProfileById(param.id);
     return { data: resp };
+  }
+
+  @Get("all")
+  async getAll() {
+    return this.userService.getUser();
   }
 }

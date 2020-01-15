@@ -26,11 +26,17 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
+  async updateProfile(profile: Partial<ProfileEntity>) {
+    const resp = await this.profileRepository.update({ id: 1 }, profile);
+    console.log(resp);
+    return resp;
+  }
+
   async getUser() {
-    const user = await this.userRepository
-      .createQueryBuilder("user")
-      .where("user.id = :id", { id: 3 })
-      .getOne();
-    return user;
+    // const user = await this.userRepository
+    //   .createQueryBuilder("user")
+    //   .where("user.id = :id", { id: 3 })
+    //   .getOne();
+    return this.userRepository.find();
   }
 }
