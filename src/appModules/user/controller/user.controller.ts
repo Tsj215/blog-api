@@ -7,13 +7,19 @@ import { UserService } from "../service/user.service";
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get("id")
+  @Get("tsj")
   test() {
-    return "test";
+    return this.userService.createUser();
+  }
+
+  @Get("get3")
+  get3() {
+    return this.userService.getUser();
   }
 
   @Get("profile/:id")
-  async loadProfile(@Param() param): Promise<ProfileEntity> {
-    return this.userService.getProfileById(param.id);
+  async loadProfile(@Param() param): Promise<{ data: ProfileEntity }> {
+    const resp = await this.userService.getProfileById(param.id);
+    return { data: resp };
   }
 }

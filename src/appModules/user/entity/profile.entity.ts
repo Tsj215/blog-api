@@ -9,7 +9,7 @@ export class ProfileEntity {
   username: string;
 
   @Column()
-  unversity: string;
+  university: string;
 
   @Column()
   email: string;

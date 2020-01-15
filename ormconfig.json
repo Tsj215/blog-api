@@ -4,7 +4,7 @@
   "port": 3306,
   "username": "root",
   "password": "199791Tsj",
-  "database": "nli_blogs",
+  "database": "nli_blog",
   "entities": ["src/**/**.entity{.ts,.js}"],
   "synchronize": true
 }
