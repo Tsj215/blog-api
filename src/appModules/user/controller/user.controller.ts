@@ -1,6 +1,14 @@
-import { Body, Controller, Get, Param, Patch, UsePipes } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  UseFilters
+} from "@nestjs/common";
 
-import { ValidationPipe } from "../../../shared/pipes/validation.pipe";
+// import { BaseControlll } from "../../../shared/base.controller";
+import { HttpExceptionFilter } from "../../../shared/filters/http-exception.filter";
 import { ProfileEntity } from "../entity/profile.entity";
 import { UserService } from "../service/user.service";
 
@@ -20,8 +28,8 @@ export class UserController {
   }
 
   @Get(":id")
+  @UseFilters(HttpExceptionFilter)
   async getAll(@Param("id") id) {
-    console.log(id);
     return this.userService.getUser(id);
   }
 }

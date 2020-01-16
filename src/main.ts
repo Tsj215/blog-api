@@ -2,9 +2,14 @@ import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 import { AppModule } from "./appliction/app.module";
+import { HttpExceptionFilter } from "./shared/filters/http-exception.filter";
+import { TransformInterceptor } from "./shared/interceptors/transform.interceptor";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(new TransformInterceptor());
 
   app.enableCors();
 

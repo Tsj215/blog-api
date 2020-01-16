@@ -28,7 +28,6 @@ export class UserService {
 
   async updateProfile(profile: Partial<ProfileEntity>) {
     const resp = await this.profileRepository.update({ id: 1 }, profile);
-    console.log(resp);
     return resp;
   }
 
