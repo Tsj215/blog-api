@@ -32,11 +32,11 @@ export class UserService {
     return resp;
   }
 
-  async getUser() {
+  async getUser(id: number) {
     // const user = await this.userRepository
     //   .createQueryBuilder("user")
     //   .where("user.id = :id", { id: 3 })
     //   .getOne();
-    return this.userRepository.find();
+    return this.userRepository.findOne({ id });
   }
 }
