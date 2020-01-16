@@ -22,9 +22,8 @@ export class UserController {
   }
 
   @Get("profile/:id")
-  async loadProfile(@Param() param): Promise<{ data: ProfileEntity }> {
-    const resp = await this.userService.getProfileById(param.id);
-    return { data: resp };
+  async loadProfile(@Param() param): Promise<ProfileEntity> {
+    return this.userService.getProfileById(param.id);
   }
 
   @Get(":id")
