@@ -16,7 +16,6 @@ export class MocloudService {
   }
 
   async addMessage(message: Partial<MoCloudMsgEntity>) {
-    console.log(message.message, message.createAt);
     const moCloudMsg = new MoCloudMsgEntity();
     moCloudMsg.message = message.message;
     moCloudMsg.createAt = message.createAt;

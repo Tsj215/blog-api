@@ -1,4 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+
+import { TagEntity } from "../entity/tag.entity";
 
 @Injectable()
-export class TagsService {}
+export class TagsService {
+  constructor(
+    @InjectRepository(TagEntity)
+    private readonly tagRepository: Repository<TagEntity>
+  ) {}
+
+  async getTagList() {
+    return this.tagRepository.find();
+  }
+}
