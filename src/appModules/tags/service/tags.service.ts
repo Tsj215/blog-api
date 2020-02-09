@@ -14,4 +14,10 @@ export class TagsService {
   async getTagList() {
     return this.tagRepository.find();
   }
+
+  async addTag(tagName: string) {
+    const tag = new TagEntity();
+    tag.content = tagName;
+    this.tagRepository.save(tag);
+  }
 }

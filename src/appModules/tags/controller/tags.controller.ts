@@ -1,4 +1,4 @@
-import { Controller, Get } from "@nestjs/common";
+import { Body, Controller, Get, Post } from "@nestjs/common";
 
 import { TagEntity } from "../entity/tag.entity";
 import { TagsService } from "../service/tags.service";
@@ -11,5 +11,10 @@ export class TagsController {
   async laodTagList() {
     const resp = await this.tagService.getTagList();
     return resp.map(t => t.content);
+  }
+
+  @Post()
+  async newTag(@Body("tagName") tagName: string) {
+    return this.tagService.addTag(tagName);
   }
 }
