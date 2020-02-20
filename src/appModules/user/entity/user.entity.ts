@@ -14,10 +14,10 @@ export class UserEntity {
   id: number;
 
   @Column()
-  name: string;
+  username: string;
 
   @Column()
-  age: number;
+  password: string;
 
   @OneToOne(type => ProfileEntity)
   @JoinColumn()
