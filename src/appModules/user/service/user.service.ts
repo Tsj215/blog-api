@@ -41,6 +41,7 @@ export class UserService {
       {
         id: user.id,
         username: user.username,
+        password: user.password,
         exp: exp.getTime() / 1000
       },
       "SECRET"
