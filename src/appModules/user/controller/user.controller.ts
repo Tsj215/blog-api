@@ -8,7 +8,6 @@ import {
   Post
 } from "@nestjs/common";
 
-import { HttpExceptionFilter } from "../../../shared/filters/http-exception.filter";
 import { LoginUserDto } from "../dto";
 import { ProfileEntity } from "../entity/profile.entity";
 import { UserService } from "../service/user.service";

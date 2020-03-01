@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
@@ -16,8 +16,14 @@ export class TagsService {
   }
 
   async addTag(tagName: string) {
-    const tag = new TagEntity();
-    tag.content = tagName;
-    this.tagRepository.save(tag);
+    const resp = await this.tagRepository.find({ where: { content: tagName } });
+    if (resp.length > 0) {
+      const errors = "标签已存在";
+      throw new HttpException({ errors }, 400);
+    } else {
+      const tag = new TagEntity();
+      tag.content = tagName;
+      this.tagRepository.save(tag);
+    }
   }
 }

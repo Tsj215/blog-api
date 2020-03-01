@@ -13,9 +13,9 @@ import { AppService } from "./app.service";
   imports: [
     TypeOrmModule.forRoot(),
     UserModule,
-    ArticleModule,
     TagsModule,
-    MocloudModule
+    MocloudModule,
+    ArticleModule
   ],
   controllers: [AppController],
   providers: [AppService]
