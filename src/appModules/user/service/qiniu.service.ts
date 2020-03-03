@@ -31,12 +31,12 @@ export class QiniuService {
 
     const bucketManager = new qiniu.rs.BucketManager(mac, config);
     const privateBucketDomain = "http://q659hkkiu.bkt.clouddn.com";
-    const deadline = parseInt((Date.now() / 1000) as any) + 3600 * 12; // 12小时过期
 
-    const privateDownloadUrl = bucketManager.privateDownloadUrl(
+    // const deadline = parseInt((Date.now() / 1000) as any) + 3600 * 12; // 12小时过期
+
+    const privateDownloadUrl = bucketManager.publicDownloadUrl(
       privateBucketDomain,
-      key,
-      deadline
+      key
     );
 
     return privateDownloadUrl;
