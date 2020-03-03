@@ -10,11 +10,15 @@ import {
 
 import { LoginUserDto } from "../dto";
 import { ProfileEntity } from "../entity/profile.entity";
+import { QiniuService } from "../service/qiniu.service";
 import { UserService } from "../service/user.service";
 
 @Controller("user")
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly qiniuService: QiniuService
+  ) {}
 
   @Patch("update")
   update(@Body() profile: Partial<ProfileEntity>) {
@@ -39,5 +43,15 @@ export class UserController {
     const user = { username, password };
 
     return { user, token };
+  }
+
+  @Get("upload")
+  async getQiniuToken() {
+    return this.qiniuService.uploadToQiniu();
+  }
+
+  @Get("download/:key")
+  async download(@Param() param) {
+    return this.qiniuService.getDownloadUrl(param.key);
   }
 }

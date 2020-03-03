@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import dayjs from "dayjs";
+import dayjs = require("dayjs");
 import * as _ from "lodash";
 import { Repository } from "typeorm";
 
