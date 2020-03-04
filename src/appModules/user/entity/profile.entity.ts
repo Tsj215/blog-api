@@ -22,4 +22,7 @@ export class ProfileEntity {
 
   @Column()
   signature: string;
+
+  @Column()
+  avatarUrl: string;
 }

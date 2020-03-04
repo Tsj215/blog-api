@@ -9,4 +9,6 @@ export class Article {
 
   @IsNotEmpty()
   readonly tags: string[];
+
+  readonly imageList: string[];
 }

@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import * as jwt from "jsonwebtoken";
 import { Repository } from "typeorm";
 
-import { LoginUserDto } from "../dto";
+import { LoginUserDto, ProfileDto } from "../dto";
 import { ProfileEntity } from "../entity/profile.entity";
 import { UserEntity } from "../entity/user.entity";
 
@@ -20,7 +20,7 @@ export class UserService {
     return this.profileRepository.findOne({ where: { id } });
   }
 
-  async updateProfile(profile: Partial<ProfileEntity>) {
+  async updateProfile(profile: Partial<ProfileDto>) {
     const resp = await this.profileRepository.update({ id: 1 }, profile);
     return resp;
   }
