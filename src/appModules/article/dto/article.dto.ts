@@ -11,4 +11,6 @@ export class Article {
   readonly tags: string[];
 
   readonly imageList: string[];
+
+  readonly createAt: string;
 }

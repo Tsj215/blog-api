@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import dayjs = require("dayjs");
 import * as _ from "lodash";
-import { Repository } from "typeorm";
+import { Between, Repository } from "typeorm";
 
 import { Article } from "../dto";
 import { ArticleEntity } from "../entity/article.entity";
@@ -24,5 +24,35 @@ export class ArticleService {
     const resp = this.articleResponsitory.save(articleDto);
 
     return resp;
+  }
+
+  async getArticleList(skip: number, take: number, article?: Article) {
+    if (!article) {
+      const resp = this.articleResponsitory.find({ skip, take });
+      return resp;
+    } else {
+      const { title, tags, createAt } = article;
+      let filterParam: any = {
+        title,
+        tags,
+        createAt: Between(
+          createAt,
+          dayjs(createAt)
+            .add(1, "day")
+            .format("YYYY-MM-DD")
+        )
+      };
+
+      !title && (filterParam = _.omit(filterParam, "title"));
+      !tags && (filterParam = _.omit(filterParam, "tags"));
+      !createAt && (filterParam = _.omit(filterParam, "createAt"));
+      const resp = this.articleResponsitory.find({
+        where: filterParam,
+        skip,
+        take
+      });
+
+      return resp;
+    }
   }
 }
