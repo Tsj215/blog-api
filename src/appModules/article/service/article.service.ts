@@ -28,8 +28,8 @@ export class ArticleService {
 
   async getArticleList(skip: number, take: number, article?: Article) {
     if (!article) {
-      const resp = this.articleResponsitory.find({ skip, take });
-      return resp;
+      const resp = await this.articleResponsitory.find({ skip, take });
+      return (resp || []).map(r => ({ ...r, tags: _.words(r.tags) }));
     } else {
       const { title, tags, createAt } = article;
       let filterParam: any = {
@@ -46,13 +46,13 @@ export class ArticleService {
       !title && (filterParam = _.omit(filterParam, "title"));
       !tags && (filterParam = _.omit(filterParam, "tags"));
       !createAt && (filterParam = _.omit(filterParam, "createAt"));
-      const resp = this.articleResponsitory.find({
+      const resp = await this.articleResponsitory.find({
         where: filterParam,
         skip,
         take
       });
 
-      return resp;
+      return (resp || []).map(r => ({ ...r, tags: _.words(r.tags) }));
     }
   }
 }
