@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Param, Post } from "@nestjs/common";
 
 import { Article } from "../dto";
 import { ArticleService } from "../service/article.service";
@@ -15,5 +15,10 @@ export class ControllerController {
   @Post("list")
   async loadArticleList(@Body() { pageNum, pageSize, article }) {
     return this.articleService.getArticleList(pageNum, pageSize, article);
+  }
+
+  @Delete("delete/:id")
+  async deleteArticleByid(@Param() id: number) {
+    return this.articleService.deleteArticle(id);
   }
 }

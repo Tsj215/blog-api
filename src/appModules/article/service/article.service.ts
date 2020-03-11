@@ -26,6 +26,7 @@ export class ArticleService {
     return resp;
   }
 
+  // 获取文章列表
   async getArticleList(skip: number, take: number, article?: Article) {
     if (!article) {
       const resp = await this.articleResponsitory.find({ skip, take });
@@ -54,5 +55,10 @@ export class ArticleService {
 
       return (resp || []).map(r => ({ ...r, tags: _.words(r.tags) }));
     }
+  }
+
+  async deleteArticle(id: number) {
+    const resp = await this.articleResponsitory.findOne(id);
+    resp && this.articleResponsitory.remove(resp);
   }
 }
