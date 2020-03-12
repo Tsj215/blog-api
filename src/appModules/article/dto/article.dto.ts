@@ -12,5 +12,7 @@ export class Article {
 
   readonly imageList: string[];
 
-  readonly createAt: string;
+  readonly from: string;
+
+  readonly to: string;
 }
