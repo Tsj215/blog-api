@@ -14,8 +14,8 @@ export class ArticleEntity {
   @Column()
   tags: string;
 
-  @Column({ type: "text" })
-  imageList: string;
+  // @Column({ type: "text" })
+  // imageList: string;
 
   @Column({ type: "datetime" })
   createAt: string;

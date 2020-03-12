@@ -18,7 +18,7 @@ export class ArticleService {
     const articleDto = new ArticleEntity();
     articleDto.title = article.title;
     articleDto.content = article.content;
-    articleDto.tags = _.toString(article.tags);
+    articleDto.tags = JSON.stringify(article.tags);
     articleDto.createAt = dayjs().format("YYYY-MM-DD HH:mm");
 
     const resp = this.articleResponsitory.save(articleDto);
@@ -29,13 +29,22 @@ export class ArticleService {
   // 获取文章列表
   async getArticleList(skip: number, take: number, article?: Article) {
     if (!article) {
-      const resp = await this.articleResponsitory.find({ skip, take });
-      return (resp || []).map(r => ({ ...r, tags: _.words(r.tags) }));
+      const resp = await this.articleResponsitory.findAndCount({
+        take,
+        skip: skip * take,
+        order: { createAt: "DESC" }
+      });
+
+      return {
+        list: (resp[0] || []).map(r => ({ ...r, tags: _.words(r.tags) })),
+        total: resp[1]
+      };
     } else {
       const { title, tags, createAt } = article;
       let filterParam: any = {
         title,
         tags,
+        order: { createAt: "DESC" },
         createAt: Between(
           createAt,
           dayjs(createAt)
@@ -45,15 +54,18 @@ export class ArticleService {
       };
 
       !title && (filterParam = _.omit(filterParam, "title"));
-      !tags && (filterParam = _.omit(filterParam, "tags"));
       !createAt && (filterParam = _.omit(filterParam, "createAt"));
-      const resp = await this.articleResponsitory.find({
-        where: filterParam,
-        skip,
-        take
+      _.isEmpty(tags) && (filterParam = _.omit(filterParam, "tags"));
+      const resp = await this.articleResponsitory.findAndCount({
+        take,
+        skip: skip * take,
+        where: filterParam
       });
 
-      return (resp || []).map(r => ({ ...r, tags: _.words(r.tags) }));
+      return {
+        list: (resp[0] || []).map(r => ({ ...r, tags: _.words(r.tags) })),
+        total: resp[1]
+      };
     }
   }
 
