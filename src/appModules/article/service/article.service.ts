@@ -133,6 +133,21 @@ export class ArticleService {
     };
   }
 
+  async getArticleById(id: number) {
+    const resp = await this.articleResponsitory.findOne(id);
+
+    return { ...resp, tags: _.words(resp.tags) };
+  }
+
+  async updateArticleById(id: number, _article: Article) {
+    const article = new ArticleEntity();
+    article.title = _article.title;
+    article.content = _article.content;
+    article.tags = JSON.stringify(_article.tags);
+    article.createAt = dayjs().format("YYYY-MM-DD HH:mm");
+    this.articleResponsitory.update({ id }, article);
+  }
+
   async deleteArticle(id: number) {
     const resp = await this.articleResponsitory.findOne(id);
     resp && this.articleResponsitory.remove(resp);
