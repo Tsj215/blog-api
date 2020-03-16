@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post
+} from "@nestjs/common";
 
 import { TagEntity } from "../entity/tag.entity";
 import { TagsService } from "../service/tags.service";
@@ -16,5 +24,18 @@ export class TagsController {
   @Post()
   async newTag(@Body("tagName") tagName: string) {
     return this.tagService.addTag(tagName);
+  }
+
+  @Patch("/:tagName/:_tagName")
+  async updateTag(
+    @Param("tagName") tagName: string,
+    @Param("_tagName") _tagName: string
+  ) {
+    return this.tagService.updateTag(tagName, _tagName);
+  }
+
+  @Delete("/:tagName")
+  async deleteTag(@Param() param) {
+    return this.tagService.deleteTag(param.tagName);
   }
 }

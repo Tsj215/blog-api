@@ -26,4 +26,16 @@ export class TagsService {
       this.tagRepository.save(tag);
     }
   }
+
+  async deleteTag(tagName: string) {
+    const resp = await this.tagRepository.find({ where: { content: tagName } });
+    this.tagRepository.remove(resp);
+  }
+
+  async updateTag(tagName: string, updateName: string) {
+    const _tag = new TagEntity();
+    _tag.content = updateName;
+
+    this.tagRepository.update({ content: tagName }, _tag);
+  }
 }
