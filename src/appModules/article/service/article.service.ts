@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import dayjs = require("dayjs");
 import * as _ from "lodash";
-import { Between, Repository } from "typeorm";
+import { Between, Like, Repository } from "typeorm";
 
 import { Article } from "../dto";
 import { ArticleEntity } from "../entity/article.entity";
@@ -18,7 +18,7 @@ export class ArticleService {
     const articleDto = new ArticleEntity();
     articleDto.title = article.title;
     articleDto.content = article.content;
-    articleDto.tags = JSON.stringify(article.tags);
+    articleDto.tags = _.toString(article.tags);
     articleDto.createAt = dayjs().format("YYYY-MM-DD HH:mm");
 
     const resp = this.articleResponsitory.save(articleDto);
@@ -29,107 +29,27 @@ export class ArticleService {
   // 获取文章列表
   async getArticleList(skip: number, take: number, article?: Article) {
     const { title, tags, from, to } = article;
-    let resp = [];
-    !title &&
-      from &&
-      to &&
-      !_.isEmpty(tags) &&
-      (resp = await this.articleResponsitory
-        .createQueryBuilder("article")
-        .where("find_in_set(:arr, tags)", { arr: tags })
-        .where("article.createAt  between :from and :to", { from, to })
-        .orderBy("article.createAt", "DESC")
-        .skip(skip * take)
-        .take(take)
-        .getManyAndCount());
 
-    _.isEmpty(tags) &&
-      title &&
-      from &&
-      to &&
-      (resp = await this.articleResponsitory
-        .createQueryBuilder("article")
-        .where({ title })
-        .where("article.createAt  between :from and :to", { from, to })
-        .orderBy("article.createAt", "DESC")
-        .skip(skip * take)
-        .take(take)
-        .getManyAndCount());
+    let filterParam: any = {
+      title,
+      tags: Like(`%${tags}%`),
+      createAt: Between(from, to)
+    };
 
-    !(from && to) &&
-      title &&
-      !_.isEmpty(tags) &&
-      (resp = await this.articleResponsitory
-        .createQueryBuilder("article")
-        .where({ title })
-        .where("find_in_set(:arr, tags)", { arr: tags })
-        .orderBy("article.createAt", "DESC")
-        .skip(skip * take)
-        .take(take)
-        .getManyAndCount());
+    !title && (filterParam = _.omit(filterParam, "title"));
+    !from && (filterParam = _.omit(filterParam, "createAt"));
+    _.isEmpty(tags) && (filterParam = _.omit(filterParam, "tags"));
 
-    _.isEmpty(tags) &&
-      !title &&
-      from &&
-      to &&
-      (resp = await this.articleResponsitory
-        .createQueryBuilder("article")
-        .where("article.createAt  between :from and :to", { from, to })
-        .orderBy("article.createAt", "DESC")
-        .skip(skip * take)
-        .take(take)
-        .getManyAndCount());
-
-    !(title && from && to) &&
-      !_.isEmpty(tags) &&
-      (resp = await this.articleResponsitory
-        .createQueryBuilder("article")
-        .where("find_in_set(:arr, tags)", { arr: tags })
-        .orderBy("article.createAt", "DESC")
-        .skip(skip * take)
-        .take(take)
-        .getManyAndCount());
-
-    !from &&
-      !to &&
-      _.isEmpty(tags) &&
-      title &&
-      (resp = await this.articleResponsitory
-        .createQueryBuilder("article")
-        .where({ title })
-        .orderBy("article.createAt", "DESC")
-        .skip(skip * take)
-        .take(take)
-        .getManyAndCount());
-
-    !title &&
-      !from &&
-      !to &&
-      _.isEmpty(tags) &&
-      (resp = await this.articleResponsitory
-        .createQueryBuilder("article")
-        .orderBy("article.createAt", "DESC")
-        .skip(skip * take)
-        .take(take)
-        .getManyAndCount());
-
-    title &&
-      from &&
-      to &&
-      _.isEmpty(tags) &&
-      (resp = await this.articleResponsitory
-        .createQueryBuilder("article")
-        .where({ title })
-        .where("find_in_set(:arr, tags)", { arr: tags })
-        .where("article.createAt  between :from and :to", { from, to })
-        .orderBy("article.createAt", "DESC")
-        .skip(skip * take)
-        .take(take)
-        .getManyAndCount());
+    const resp = await this.articleResponsitory.findAndCount({
+      take,
+      skip: skip * take,
+      where: filterParam,
+      order: { createAt: "DESC" }
+    });
 
     return {
-      list: (resp[0] || []).map(r => ({ ...r, tags: _.words(r.tags) })),
-      total: resp[1]
+      total: resp[1],
+      list: (resp[0] || []).map(r => ({ ...r, tags: _.words(r.tags) }))
     };
   }
 
@@ -143,7 +63,7 @@ export class ArticleService {
     const article = new ArticleEntity();
     article.title = _article.title;
     article.content = _article.content;
-    article.tags = JSON.stringify(_article.tags);
+    article.tags = _.toString(_article.tags);
     article.createAt = dayjs().format("YYYY-MM-DD HH:mm");
     this.articleResponsitory.update({ id }, article);
   }
