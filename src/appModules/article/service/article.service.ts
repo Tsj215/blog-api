@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import dayjs = require("dayjs");
 import * as _ from "lodash";
-import { Between, Like, Repository } from "typeorm";
+import { Between, Like, Raw, Repository } from "typeorm";
 
 import { Article } from "../dto";
 import { ArticleEntity } from "../entity/article.entity";
@@ -28,17 +28,16 @@ export class ArticleService {
 
   // 获取文章列表
   async getArticleList(skip: number, take: number, article?: Article) {
-    const { title, tags, from, to } = article;
-
     let filterParam: any = {
-      title,
-      tags: Like(`%${tags}%`),
-      createAt: Between(from, to)
+      title: _.get(article, "title"),
+      tags: Like(`%${_.get(article, "tags")}%`),
+      createAt: Between(_.get(article, "from"), _.get(article, "to"))
     };
 
-    !title && (filterParam = _.omit(filterParam, "title"));
-    !from && (filterParam = _.omit(filterParam, "createAt"));
-    _.isEmpty(tags) && (filterParam = _.omit(filterParam, "tags"));
+    !_.get(article, "title") && (filterParam = _.omit(filterParam, "title"));
+    !_.get(article, "from") && (filterParam = _.omit(filterParam, "createAt"));
+    _.isEmpty(_.get(article, "tags")) &&
+      (filterParam = _.omit(filterParam, "tags"));
 
     const resp = await this.articleResponsitory.findAndCount({
       take,
@@ -46,6 +45,29 @@ export class ArticleService {
       where: filterParam,
       order: { createAt: "DESC" }
     });
+
+    return {
+      total: resp[1],
+      list: (resp[0] || []).map(r => ({ ...r, tags: _.words(r.tags) }))
+    };
+  }
+
+  async getArticleByTags(skip: number, take: number, tags: string[]) {
+    let resp;
+
+    if (_.isEmpty(tags)) {
+      resp = await this.articleResponsitory.findAndCount({
+        take,
+        skip: take * skip,
+        order: { createAt: "DESC" }
+      });
+    } else {
+      resp = await this.articleResponsitory.findAndCount({
+        take,
+        skip: skip * take,
+        where: tags.map(t => ({ tags: Like(`%${t}%`) }))
+      });
+    }
 
     return {
       total: resp[1],

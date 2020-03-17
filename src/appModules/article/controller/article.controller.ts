@@ -25,6 +25,11 @@ export class ControllerController {
     return this.articleService.getArticleById(param.id);
   }
 
+  @Post("list/tags")
+  async loadArticleByTags(@Body() { pageNum, pageSize, tags }) {
+    return this.articleService.getArticleByTags(pageNum, pageSize, tags);
+  }
+
   @Post("list")
   async loadArticleList(@Body() { pageNum, pageSize, article }) {
     return this.articleService.getArticleList(pageNum, pageSize, article);

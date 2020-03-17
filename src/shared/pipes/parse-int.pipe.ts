@@ -12,7 +12,6 @@ export class ParseIntPipe implements PipeTransform<string> {
     if (isNaN(val)) {
       throw new BadRequestException("Validation failed");
     }
-    console.log("val", val);
     return val;
   }
 }
