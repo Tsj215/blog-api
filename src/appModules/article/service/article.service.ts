@@ -48,7 +48,7 @@ export class ArticleService {
 
     return {
       total: resp[1],
-      list: (resp[0] || []).map(r => ({ ...r, tags: _.words(r.tags) }))
+      list: (resp[0] || []).map(r => ({ ...r, tags: _.split(r.tags, ",") }))
     };
   }
 
@@ -71,14 +71,14 @@ export class ArticleService {
 
     return {
       total: resp[1],
-      list: (resp[0] || []).map(r => ({ ...r, tags: _.words(r.tags) }))
+      list: (resp[0] || []).map(r => ({ ...r, tags: _.split(r.tags, ",") }))
     };
   }
 
   async getArticleById(id: number) {
     const resp = await this.articleResponsitory.findOne(id);
 
-    return { ...resp, tags: _.words(resp.tags) };
+    return { ...resp, tags: _.split(resp.tags, ",") };
   }
 
   async updateArticleById(id: number, _article: Article) {
