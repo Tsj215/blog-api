@@ -8,11 +8,9 @@ export class Article {
   readonly content: string;
 
   @IsNotEmpty()
-  readonly tags: string[];
+  readonly tags: string;
 
-  readonly imageList: string[];
+  readonly imageList: string;
 
   readonly from: string;
-
-  readonly to: string;
 }

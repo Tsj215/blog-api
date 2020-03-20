@@ -8,7 +8,7 @@ import {
   Post
 } from "@nestjs/common";
 
-import { Article } from "../dto";
+import { Article, Image } from "../dto";
 import { ArticleService } from "../service/article.service";
 
 @Controller("article")
@@ -16,8 +16,11 @@ export class ControllerController {
   constructor(private readonly articleService: ArticleService) {}
 
   @Post("new")
-  async newArticle(@Body() article: Article) {
-    return this.articleService.newArticle(article);
+  async newArticle(
+    @Body("article") article: Article,
+    @Body("imageList") imageList: Image[]
+  ) {
+    return this.articleService.newArticle(article, imageList);
   }
 
   @Get(":id")
@@ -41,7 +44,11 @@ export class ControllerController {
   }
 
   @Patch("update/:id")
-  async updateArticle(@Param() param, @Body() article) {
-    return this.articleService.updateArticleById(param.id, article);
+  async updateArticle(
+    @Param("id") id,
+    @Body("article") article,
+    @Body("images") images
+  ) {
+    return this.articleService.updateArticleById(id, article, images);
   }
 }

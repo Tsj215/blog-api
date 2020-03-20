@@ -41,4 +41,21 @@ export class QiniuService {
 
     return privateDownloadUrl;
   }
+
+  async deleteFileByKeys(key: string) {
+    const bucket = "nli-blog";
+    const accessKey = "hl5yE-ZO45RrsXBdlAUjVbbug3GdrBP1XPPv35bW";
+    const secretKey = "UlDLHMCfG4CR1l5MYddxt2VqbIcC6OGmgoH7LNJu";
+    const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+    const config = new qiniu.conf.Config();
+
+    const bucketManager = new qiniu.rs.BucketManager(mac, config);
+
+    await bucketManager.delete(bucket, key, (err, respBody, respInfo) => {
+      if (err) {
+        throw err;
+      }
+      return respInfo;
+    });
+  }
 }

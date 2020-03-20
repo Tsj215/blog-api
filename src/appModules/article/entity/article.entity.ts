@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+
+import { ImageEntity } from "../entity/imagelist.entity";
 
 @Entity("article")
 export class ArticleEntity {
@@ -14,9 +16,12 @@ export class ArticleEntity {
   @Column()
   tags: string;
 
-  // @Column({ type: "text" })
-  // imageList: string;
-
   @Column({ type: "datetime" })
   createAt: string;
+
+  @OneToMany(
+    type => ImageEntity,
+    image => image.article
+  )
+  images: ImageEntity[];
 }

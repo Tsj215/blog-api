@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   Param,
@@ -53,5 +54,10 @@ export class UserController {
   @Get("download/:key")
   async download(@Param() param) {
     return this.qiniuService.getDownloadUrl(param.key);
+  }
+
+  @Delete("delete/:key")
+  async deleteFileByKey(@Param("key") key: string) {
+    return this.qiniuService.deleteFileByKeys(key);
   }
 }
