@@ -47,8 +47,8 @@ export class ControllerController {
   async updateArticle(
     @Param("id") id,
     @Body("article") article,
-    @Body("images") images
+    @Body("imageList") imageList
   ) {
-    return this.articleService.updateArticleById(id, article, images);
+    return this.articleService.updateArticleById(id, article, imageList);
   }
 }

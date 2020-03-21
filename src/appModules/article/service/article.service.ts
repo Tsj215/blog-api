@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import dayjs = require("dayjs");
 import * as _ from "lodash";
-import { Between, Like, Raw, Repository } from "typeorm";
+import { Between, Like, Repository } from "typeorm";
 
 import { Article, Image } from "../dto";
 import { ArticleEntity } from "../entity/article.entity";
@@ -18,24 +18,25 @@ export class ArticleService {
   ) {}
 
   async newArticle(article: Article, imageList?: Image[]) {
-    const _imgList = imageList.map(i => {
-      const imageDto = new ImageEntity();
-      imageDto.name = i.name;
-      imageDto.url = i.url;
-
-      return imageDto;
-    });
-
-    await this.imageResponsitory.save(_imgList);
-
     const articleDto = new ArticleEntity();
     articleDto.title = article.title;
     articleDto.content = article.content;
     articleDto.tags = _.toString(article.tags);
     articleDto.createAt = dayjs().format("YYYY-MM-DD HH:mm");
-    articleDto.images = _imgList;
 
     const resp = await this.articleResponsitory.save(articleDto);
+
+    if (!_.isEmpty(imageList)) {
+      const _imgList = imageList.map(i => {
+        const imageDto = new ImageEntity();
+        imageDto.name = i.name;
+        imageDto.url = i.url;
+        imageDto.article = articleDto;
+        return imageDto;
+      });
+
+      await this.imageResponsitory.save(_imgList);
+    }
 
     return resp;
   }
@@ -57,6 +58,7 @@ export class ArticleService {
       take,
       skip: skip * take,
       where: filterParam,
+      relations: ["images"],
       order: { createAt: "DESC" }
     });
 
@@ -103,26 +105,15 @@ export class ArticleService {
   async updateArticleById(
     id: number,
     _article: Article,
-    images?: ImageEntity[]
+    imageList?: ImageEntity[]
   ) {
-    if (!_.isEmpty(images)) {
-      const imageList = images.map(i => {
-        const imageDto = new ImageEntity();
-        imageDto.name = i.name;
-        imageDto.url = i.url;
+    const articleDto = new ArticleEntity();
+    articleDto.title = _article.title;
+    articleDto.content = _article.content;
+    articleDto.tags = _.toString(_article.tags);
+    articleDto.createAt = dayjs().format("YYYY-MM-DD HH:mm");
 
-        return imageDto;
-      });
-      await this.imageResponsitory.save(imageList);
-    }
-
-    const article = new ArticleEntity();
-    article.title = _article.title;
-    article.content = _article.content;
-    article.tags = _.toString(_article.tags);
-    article.createAt = dayjs().format("YYYY-MM-DD HH:mm");
-    !_.isEmpty(images) && (article.images = images);
-    this.articleResponsitory.update({ id }, article);
+    await this.articleResponsitory.update(id, articleDto);
   }
 
   async deleteArticle(id: number) {

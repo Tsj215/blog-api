@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn
-} from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 import { ArticleEntity } from "../entity/article.entity";
 
@@ -21,7 +15,8 @@ export class ImageEntity {
 
   @ManyToOne(
     type => ArticleEntity,
-    article => article.images
+    article => article.images,
+    { onDelete: "CASCADE" }
   )
   article: ArticleEntity;
 }
