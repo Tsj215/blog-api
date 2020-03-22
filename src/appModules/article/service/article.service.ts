@@ -48,10 +48,10 @@ export class ArticleService {
     });
 
     // 文章 images 不为空， 删除全部
-    if (_.isEmpty(imageList)) {
-      console.log("article", article);
-      this.imageResponsitory.delete(_.compact(article.images.map(i => i.id)));
-    } else {
+
+    if (imageList.length > 0) {
+      await this.imageResponsitory.delete(article.images.map(i => i.id));
+
       const _imagList = (imageList || []).map(r => {
         const imageDto = new ImageEntity();
         imageDto.name = r.name;
