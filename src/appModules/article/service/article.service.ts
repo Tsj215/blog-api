@@ -41,6 +41,30 @@ export class ArticleService {
     return resp;
   }
 
+  async addImageForArticle(articleId: number, imageList?: Image[]) {
+    const article = await this.articleResponsitory.findOne({
+      where: { id: articleId },
+      relations: ["images"]
+    });
+
+    // 文章 images 不为空， 删除全部
+    if (_.isEmpty(imageList)) {
+      console.log("article", article);
+      this.imageResponsitory.delete(_.compact(article.images.map(i => i.id)));
+    } else {
+      const _imagList = (imageList || []).map(r => {
+        const imageDto = new ImageEntity();
+        imageDto.name = r.name;
+        imageDto.url = r.url;
+        imageDto.article = article;
+
+        return imageDto;
+      });
+
+      this.imageResponsitory.save(_imagList);
+    }
+  }
+
   // 获取文章列表
   async getArticleList(skip: number, take: number, article?: Article) {
     let filterParam: any = {
@@ -102,15 +126,11 @@ export class ArticleService {
     return { ...resp, tags: _.split(resp.tags, ",") };
   }
 
-  async updateArticleById(
-    id: number,
-    _article: Article,
-    imageList?: ImageEntity[]
-  ) {
+  async updateArticleById(id: number, article: Article) {
     const articleDto = new ArticleEntity();
-    articleDto.title = _article.title;
-    articleDto.content = _article.content;
-    articleDto.tags = _.toString(_article.tags);
+    articleDto.title = article.title;
+    articleDto.content = article.content;
+    articleDto.tags = _.toString(article.tags);
     articleDto.createAt = dayjs().format("YYYY-MM-DD HH:mm");
 
     await this.articleResponsitory.update(id, articleDto);

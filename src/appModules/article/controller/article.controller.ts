@@ -44,11 +44,15 @@ export class ControllerController {
   }
 
   @Patch("update/:id")
-  async updateArticle(
-    @Param("id") id,
-    @Body("article") article,
+  async updateArticle(@Param("id") id, @Body() article) {
+    return this.articleService.updateArticleById(id, article);
+  }
+
+  @Post("imageList/:articleId")
+  async updateArticleImageList(
+    @Param("articleId") articleId,
     @Body("imageList") imageList
   ) {
-    return this.articleService.updateArticleById(id, article, imageList);
+    this.articleService.addImageForArticle(articleId, imageList);
   }
 }
