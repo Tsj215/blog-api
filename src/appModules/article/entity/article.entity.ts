@@ -19,6 +19,9 @@ export class ArticleEntity {
   @Column({ type: "datetime" })
   createAt: string;
 
+  @Column({ type: "datetime", default: null })
+  updateAt: string;
+
   @Column({ name: "visit_times", default: 0 })
   visitTimes: number;
 

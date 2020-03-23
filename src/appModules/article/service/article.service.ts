@@ -136,7 +136,7 @@ export class ArticleService {
     articleDto.title = article.title;
     articleDto.content = article.content;
     articleDto.tags = _.toString(article.tags);
-    articleDto.createAt = dayjs().format("YYYY-MM-DD HH:mm");
+    articleDto.updateAt = dayjs().format("YYYY-MM-DD HH:mm");
 
     await this.articleResponsitory.update(id, articleDto);
   }
