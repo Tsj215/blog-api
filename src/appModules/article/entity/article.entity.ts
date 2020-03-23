@@ -19,6 +19,9 @@ export class ArticleEntity {
   @Column({ type: "datetime" })
   createAt: string;
 
+  @Column({ name: "visit_times", default: 0 })
+  visitTimes: number;
+
   @OneToMany(
     type => ImageEntity,
     image => image.article

@@ -123,6 +123,11 @@ export class ArticleService {
       relations: ["images"]
     });
 
+    const article = new ArticleEntity();
+    article.visitTimes = resp.visitTimes + 1;
+
+    await this.articleResponsitory.update(id, article);
+
     return { ...resp, tags: _.split(resp.tags, ",") };
   }
 
