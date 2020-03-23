@@ -17,6 +17,7 @@ export class ArticleService {
     private readonly imageResponsitory: Repository<ImageEntity>
   ) {}
 
+  /** 新建文章 */
   async newArticle(article: Article, imageList?: Image[]) {
     const articleDto = new ArticleEntity();
     articleDto.title = article.title;
@@ -41,6 +42,7 @@ export class ArticleService {
     return resp;
   }
 
+  /** 文章图片操作 */
   async addImageForArticle(articleId: number, imageList?: Image[]) {
     const article = await this.articleResponsitory.findOne({
       where: { id: articleId },
@@ -65,7 +67,7 @@ export class ArticleService {
     }
   }
 
-  // 获取文章列表
+  /** 获取文章列表 */
   async getArticleList(skip: number, take: number, article?: Article) {
     let filterParam: any = {
       title: _.get(article, "title"),
@@ -92,6 +94,7 @@ export class ArticleService {
     };
   }
 
+  /** 根据标签获取文章 */
   async getArticleByTags(skip: number, take: number, tags: string[]) {
     let resp;
 
@@ -117,6 +120,7 @@ export class ArticleService {
     };
   }
 
+  /** 根据 id 获取文章 */
   async getArticleById(id: number) {
     const resp = await this.articleResponsitory.findOne({
       where: { id },
@@ -131,6 +135,7 @@ export class ArticleService {
     return { ...resp, tags: _.split(resp.tags, ",") };
   }
 
+  /** 更新文章 */
   async updateArticleById(id: number, article: Article) {
     const articleDto = new ArticleEntity();
     articleDto.title = article.title;
@@ -139,6 +144,16 @@ export class ArticleService {
     articleDto.updateAt = dayjs().format("YYYY-MM-DD HH:mm");
 
     await this.articleResponsitory.update(id, articleDto);
+  }
+
+  /** 根据 createAt 分组文章 */
+  async groupArticleByCreateAt() {
+    const resp = await this.articleResponsitory
+      .createQueryBuilder("article")
+      .groupBy("article.createAt")
+      .getMany();
+
+    return resp;
   }
 
   async deleteArticle(id: number) {
