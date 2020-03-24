@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import dayjs = require("dayjs");
 import * as _ from "lodash";
-import { Between, Like, Repository } from "typeorm";
+import { Between, Connection, Like, Repository, getRepository } from "typeorm";
 
 import { Article, Image } from "../dto";
 import { ArticleEntity } from "../entity/article.entity";
@@ -148,18 +148,21 @@ export class ArticleService {
     await this.articleResponsitory.update(id, articleDto);
   }
 
-  /** 根据 createAt 分组文章 */
-  async groupArticleByCreateAt() {
-    const resp = await this.articleResponsitory
-      .createQueryBuilder("article")
-      .groupBy("article.createAt")
-      .getMany();
-
-    return resp;
-  }
-
   async deleteArticle(id: number) {
     const resp = await this.articleResponsitory.findOne(id);
     resp && this.articleResponsitory.remove(resp);
+  }
+
+  async getCountOfArticleByCreateAt() {
+    const resp = await getRepository(ArticleEntity)
+      .createQueryBuilder("article")
+      .select([
+        `DATE_FORMAT(article.createAt,'%Y-%m') as 'date'`,
+        `count(1) as 'count'`
+      ])
+      .groupBy("article.createAt")
+      .getRawMany();
+
+    return resp;
   }
 }

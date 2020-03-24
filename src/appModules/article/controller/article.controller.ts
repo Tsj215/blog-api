@@ -55,4 +55,9 @@ export class ControllerController {
   ) {
     this.articleService.addImageForArticle(articleId, imageList);
   }
+
+  @Get("count/createAt")
+  async loadCountOfArticleByCreateAt() {
+    return this.articleService.getCountOfArticleByCreateAt();
+  }
 }
