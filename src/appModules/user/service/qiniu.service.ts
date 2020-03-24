@@ -30,7 +30,7 @@ export class QiniuService {
     const config = new qiniu.conf.Config();
 
     const bucketManager = new qiniu.rs.BucketManager(mac, config);
-    const privateBucketDomain = "http://q659hkkiu.bkt.clouddn.com";
+    const privateBucketDomain = "http://tsj.zhoutao123.com";
 
     // const deadline = parseInt((Date.now() / 1000) as any) + 3600 * 12; // 12小时过期
 

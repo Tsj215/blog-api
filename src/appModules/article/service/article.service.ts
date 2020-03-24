@@ -51,7 +51,7 @@ export class ArticleService {
 
     // 文章 images 不为空， 删除全部
 
-    if (imageList.length > 0) {
+    if (!_.isEmpty(imageList)) {
       await this.imageResponsitory.delete(article.images.map(i => i.id));
 
       const _imagList = (imageList || []).map(r => {
@@ -64,6 +64,8 @@ export class ArticleService {
       });
 
       this.imageResponsitory.save(_imagList);
+    } else if (_.isEmpty(imageList)) {
+      await this.imageResponsitory.delete(article.images.map(i => i.id));
     }
   }
 
