@@ -148,11 +148,13 @@ export class ArticleService {
     await this.articleResponsitory.update(id, articleDto);
   }
 
+  /** 删除文章 */
   async deleteArticle(id: number) {
     const resp = await this.articleResponsitory.findOne(id);
     resp && this.articleResponsitory.remove(resp);
   }
 
+  /** 文章归档 */
   async getCountOfArticleByCreateAt() {
     const resp = await getRepository(ArticleEntity)
       .createQueryBuilder("article")
@@ -160,7 +162,7 @@ export class ArticleService {
         `DATE_FORMAT(article.createAt,'%Y-%m') as 'date'`,
         `count(1) as 'count'`
       ])
-      .groupBy("article.createAt")
+      .groupBy("date")
       .getRawMany();
 
     return resp;
