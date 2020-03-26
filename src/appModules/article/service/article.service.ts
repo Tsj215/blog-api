@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import dayjs = require("dayjs");
 import * as _ from "lodash";
-import { Between, Connection, Like, Repository, getRepository } from "typeorm";
+import { Between, Like, Repository, getRepository } from "typeorm";
 
 import { Article, Image } from "../dto";
 import { ArticleEntity } from "../entity/article.entity";
