@@ -22,7 +22,7 @@ export class ArticleService {
     const articleDto = new ArticleEntity();
     articleDto.title = article.title;
     articleDto.content = article.content;
-    articleDto.tags = _.toString(article.tags);
+    // articleDto.tags = _.toString(article.tags);
     articleDto.createAt = dayjs().format("YYYY-MM-DD HH:mm");
 
     const resp = await this.articleResponsitory.save(articleDto);
@@ -92,7 +92,8 @@ export class ArticleService {
 
     return {
       total: resp[1],
-      list: (resp[0] || []).map(r => ({ ...r, tags: _.split(r.tags, ",") }))
+      // list: (resp[0] || []).map(r => ({ ...r, tags: _.split(r.tags, ",") }))
+      list: resp[0]
     };
   }
 
@@ -134,7 +135,8 @@ export class ArticleService {
 
     await this.articleResponsitory.update(id, article);
 
-    return { ...resp, tags: _.split(resp.tags, ",") };
+    // return { ...resp, tags: _.split(resp.tags, ",") };
+    return resp;
   }
 
   /** 更新文章 */
@@ -142,7 +144,7 @@ export class ArticleService {
     const articleDto = new ArticleEntity();
     articleDto.title = article.title;
     articleDto.content = article.content;
-    articleDto.tags = _.toString(article.tags);
+    // articleDto.tags = _.toString(article.tags);
     articleDto.updateAt = dayjs().format("YYYY-MM-DD HH:mm");
 
     await this.articleResponsitory.update(id, articleDto);

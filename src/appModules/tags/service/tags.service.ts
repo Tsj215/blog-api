@@ -27,15 +27,12 @@ export class TagsService {
     }
   }
 
-  async deleteTag(tagName: string) {
-    const resp = await this.tagRepository.find({ where: { content: tagName } });
+  async deleteTag(tagId: number) {
+    const resp = await this.tagRepository.findOne(tagId);
     this.tagRepository.remove(resp);
   }
 
-  async updateTag(tagName: string, updateName: string) {
-    const _tag = new TagEntity();
-    _tag.content = updateName;
-
-    this.tagRepository.update({ content: tagName }, _tag);
+  async updateTag(tagId: number, tagName: string) {
+    return this.tagRepository.update({ id: tagId }, { content: tagName });
   }
 }

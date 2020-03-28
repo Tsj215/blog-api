@@ -1,5 +1,13 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from "typeorm";
 
+import { TagEntity } from "../../tags/entity/tag.entity";
 import { ImageEntity } from "../entity/imagelist.entity";
 
 @Entity("article")
@@ -13,8 +21,12 @@ export class ArticleEntity {
   @Column({ type: "text" })
   content: string;
 
-  @Column()
-  tags: string;
+  @ManyToMany(
+    type => TagEntity,
+    tag => tag.articles
+  )
+  @JoinTable()
+  tags: TagEntity[];
 
   @Column({ type: "datetime" })
   createAt: string;
