@@ -4,6 +4,7 @@ import dayjs = require("dayjs");
 import * as _ from "lodash";
 import { Between, Like, Repository, getRepository } from "typeorm";
 
+import { TagEntity } from "../../tags/entity/tag.entity";
 import { Article, Image } from "../dto";
 import { ArticleEntity } from "../entity/article.entity";
 import { ImageEntity } from "../entity/imagelist.entity";
@@ -46,7 +47,7 @@ export class ArticleService {
   async addImageForArticle(articleId: number, imageList?: Image[]) {
     const article = await this.articleResponsitory.findOne({
       where: { id: articleId },
-      relations: ["images", "tag"]
+      relations: ["images", "tags"]
     });
 
     // 文章 images 不为空， 删除全部
@@ -137,12 +138,14 @@ export class ArticleService {
 
   /** 更新文章 */
   async updateArticleById(id: number, article: Article) {
-    const articleDto = new ArticleEntity();
-    articleDto.title = article.title;
-    articleDto.content = article.content;
-    articleDto.updateAt = dayjs().format("YYYY-MM-DD HH:mm");
+    const _article = await this.articleResponsitory.findOne(id);
 
-    await this.articleResponsitory.update(id, articleDto);
+    _article.title = article.title;
+    _article.content = article.content;
+    _article.tags = article.tags;
+    _article.updateAt = dayjs().format("YYYY-MM-DD HH:mm");
+
+    await this.articleResponsitory.save(_article);
   }
 
   /** 删除文章 */
