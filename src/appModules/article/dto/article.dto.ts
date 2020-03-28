@@ -1,5 +1,7 @@
 import { IsNotEmpty } from "class-validator";
 
+import { TagEntity } from "../../tags/entity/tag.entity";
+
 export class Article {
   @IsNotEmpty()
   readonly title: string;
@@ -8,7 +10,7 @@ export class Article {
   readonly content: string;
 
   @IsNotEmpty()
-  readonly tags: string;
+  readonly tags: TagEntity[];
 
   readonly imageList: string;
 

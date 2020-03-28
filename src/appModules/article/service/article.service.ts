@@ -20,9 +20,9 @@ export class ArticleService {
   /** 新建文章 */
   async newArticle(article: Article, imageList?: Image[]) {
     const articleDto = new ArticleEntity();
+    articleDto.tags = article.tags;
     articleDto.title = article.title;
     articleDto.content = article.content;
-    // articleDto.tags = _.toString(article.tags);
     articleDto.createAt = dayjs().format("YYYY-MM-DD HH:mm");
 
     const resp = await this.articleResponsitory.save(articleDto);
@@ -46,7 +46,7 @@ export class ArticleService {
   async addImageForArticle(articleId: number, imageList?: Image[]) {
     const article = await this.articleResponsitory.findOne({
       where: { id: articleId },
-      relations: ["images"]
+      relations: ["images", "tag"]
     });
 
     // 文章 images 不为空， 删除全部
@@ -73,26 +73,22 @@ export class ArticleService {
   async getArticleList(skip: number, take: number, article?: Article) {
     let filterParam: any = {
       title: _.get(article, "title"),
-      tags: Like(`%${_.get(article, "tags")}%`),
       createAt: Between(_.get(article, "from"), _.get(article, "to"))
     };
 
     !_.get(article, "title") && (filterParam = _.omit(filterParam, "title"));
     !_.get(article, "from") && (filterParam = _.omit(filterParam, "createAt"));
-    _.isEmpty(_.get(article, "tags")) &&
-      (filterParam = _.omit(filterParam, "tags"));
 
     const resp = await this.articleResponsitory.findAndCount({
       take,
       skip: skip * take,
       where: filterParam,
-      relations: ["images"],
+      relations: ["images", "tags"],
       order: { createAt: "DESC" }
     });
 
     return {
       total: resp[1],
-      // list: (resp[0] || []).map(r => ({ ...r, tags: _.split(r.tags, ",") }))
       list: resp[0]
     };
   }
@@ -105,14 +101,14 @@ export class ArticleService {
       resp = await this.articleResponsitory.findAndCount({
         take,
         skip: take * skip,
-        relations: ["images"],
+        relations: ["images", "tags"],
         order: { createAt: "DESC" }
       });
     } else {
       resp = await this.articleResponsitory.findAndCount({
         take,
         skip: skip * take,
-        relations: ["images"],
+        relations: ["images", "tags"],
         where: tags.map(t => ({ tags: Like(`%${t}%`) }))
       });
     }
@@ -127,15 +123,15 @@ export class ArticleService {
   async getArticleById(id: number) {
     const resp = await this.articleResponsitory.findOne({
       where: { id },
-      relations: ["images"]
+      relations: ["images", "tags"]
     });
 
+    // 更新点击量
     const article = new ArticleEntity();
     article.visitTimes = resp.visitTimes + 1;
 
     await this.articleResponsitory.update(id, article);
 
-    // return { ...resp, tags: _.split(resp.tags, ",") };
     return resp;
   }
 
@@ -144,7 +140,6 @@ export class ArticleService {
     const articleDto = new ArticleEntity();
     articleDto.title = article.title;
     articleDto.content = article.content;
-    // articleDto.tags = _.toString(article.tags);
     articleDto.updateAt = dayjs().format("YYYY-MM-DD HH:mm");
 
     await this.articleResponsitory.update(id, articleDto);
