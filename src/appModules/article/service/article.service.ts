@@ -4,7 +4,6 @@ import dayjs = require("dayjs");
 import * as _ from "lodash";
 import { Between, Like, Repository, getRepository } from "typeorm";
 
-import { TagEntity } from "../../tags/entity/tag.entity";
 import { Article, Image } from "../dto";
 import { ArticleEntity } from "../entity/article.entity";
 import { ImageEntity } from "../entity/imagelist.entity";
@@ -80,7 +79,7 @@ export class ArticleService {
     !_.get(article, "title") && (filterParam = _.omit(filterParam, "title"));
     !_.get(article, "from") && (filterParam = _.omit(filterParam, "createAt"));
 
-    const resp = await this.articleResponsitory.findAndCount({
+    const resp = await this.articleResponsitory.find({
       take,
       skip: skip * take,
       where: filterParam,
@@ -88,9 +87,20 @@ export class ArticleService {
       order: { createAt: "DESC" }
     });
 
+    if (!_.isUndefined(article) && !_.isEmpty(article.tags)) {
+      const ids = article.tags.map(t => t.id);
+
+      const finalResp = resp.filter(a => {
+        const _ids = a.tags.map(t => t.id);
+        return !_.isEmpty(_.intersection(ids, _ids));
+      });
+
+      return { list: finalResp, total: finalResp.length };
+    }
+
     return {
-      total: resp[1],
-      list: resp[0]
+      list: resp,
+      total: resp.length
     };
   }
 
