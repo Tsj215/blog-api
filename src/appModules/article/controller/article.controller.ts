@@ -45,7 +45,6 @@ export class ControllerController {
 
   @Patch("update/:id")
   async updateArticle(@Param("id") id, @Body() article) {
-    console.log("id", id);
     return this.articleService.updateArticleById(id, article);
   }
 

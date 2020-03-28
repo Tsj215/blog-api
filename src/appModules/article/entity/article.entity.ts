@@ -23,8 +23,7 @@ export class ArticleEntity {
 
   @ManyToMany(
     type => TagEntity,
-    tag => tag.articles,
-    { cascade: true }
+    tag => tag.articles
   )
   @JoinTable()
   tags: TagEntity[];
