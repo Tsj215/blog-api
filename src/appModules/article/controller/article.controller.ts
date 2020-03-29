@@ -61,9 +61,9 @@ export class ControllerController {
     return this.articleService.getCountOfArticleByCreateAt();
   }
 
-  @Post("save/image")
-  async saveImage(@Body() image) {
-    return this.articleService.saveImage(image);
+  @Post("save/image/:articleId")
+  async saveImage(@Param("articleId") articleId, @Body() image) {
+    return this.articleService.saveImage(articleId, image);
   }
 
   @Delete("delete/image/:id")

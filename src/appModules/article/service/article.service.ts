@@ -147,10 +147,13 @@ export class ArticleService {
   }
 
   /** 添加图片 */
-  async saveImage(image: Image) {
+  async saveImage(articleId: number, image: Image) {
+    const article = await this.articleResponsitory.findOne(articleId);
+
     const imageDto = new ImageEntity();
     imageDto.name = image.name;
     imageDto.url = image.url;
+    imageDto.article = article;
 
     return await this.imageResponsitory.save(imageDto);
   }
