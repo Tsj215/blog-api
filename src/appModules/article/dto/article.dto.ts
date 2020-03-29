@@ -1,6 +1,7 @@
 import { IsNotEmpty } from "class-validator";
 
 import { TagEntity } from "../../tags/entity/tag.entity";
+import { ImageEntity } from "../entity/imagelist.entity";
 
 export class Article {
   @IsNotEmpty()
@@ -12,7 +13,7 @@ export class Article {
   @IsNotEmpty()
   readonly tags: TagEntity[];
 
-  readonly imageList: string;
+  readonly imageList: ImageEntity[];
 
   readonly from: string;
 }

@@ -146,13 +146,32 @@ export class ArticleService {
     return resp;
   }
 
+  /** 添加图片 */
+  async saveImage(image: Image) {
+    const imageDto = new ImageEntity();
+    imageDto.name = image.name;
+    imageDto.url = image.url;
+
+    return await this.imageResponsitory.save(imageDto);
+  }
+
+  /** 删除图片 */
+  async deleteImage(imageId: number) {
+    const resp = await this.imageResponsitory.findOne(imageId);
+
+    return await this.imageResponsitory.delete(resp);
+  }
+
   /** 更新文章 */
   async updateArticleById(id: number, article: Article) {
-    const _article = await this.articleResponsitory.findOne(id);
+    const _article = await this.articleResponsitory.findOne(id, {
+      relations: ["images", "tags"]
+    });
 
     _article.title = article.title;
     _article.content = article.content;
     _article.tags = article.tags;
+    _article.images = article.imageList;
     _article.updateAt = dayjs().format("YYYY-MM-DD HH:mm");
 
     await this.articleResponsitory.save(_article);

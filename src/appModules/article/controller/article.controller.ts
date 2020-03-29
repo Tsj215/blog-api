@@ -60,4 +60,14 @@ export class ControllerController {
   async loadCountOfArticleByCreateAt() {
     return this.articleService.getCountOfArticleByCreateAt();
   }
+
+  @Post("save/image")
+  async saveImage(@Body() image) {
+    return this.articleService.saveImage(image);
+  }
+
+  @Delete("delete/image/:id")
+  async deleteImage(@Param("id") id) {
+    return this.articleService.deleteImage(id);
+  }
 }
