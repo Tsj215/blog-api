@@ -84,9 +84,13 @@ export class ArticleService {
       skip: skip * take,
       where: filterParam,
       relations: ["images", "tags"],
-      order: { createAt: "DESC" }
+      order:
+        article.orderBy === "createAt"
+          ? { createAt: "DESC" }
+          : { visitTimes: "DESC" }
     });
 
+    // 对 tag 进行筛选
     if (!_.isUndefined(article) && !_.isEmpty(article.tags)) {
       const ids = article.tags.map(t => t.id);
 

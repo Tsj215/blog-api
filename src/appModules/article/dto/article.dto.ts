@@ -16,4 +16,6 @@ export class Article {
   readonly imageList: ImageEntity[];
 
   readonly from: string;
+
+  readonly orderBy: "visiTime" | "createAt";
 }
