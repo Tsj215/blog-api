@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+@Entity("mo_cloud_msg_entity")
 export class MoCloudMsgEntity {
   @PrimaryGeneratedColumn()
   id: number;

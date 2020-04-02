@@ -8,7 +8,6 @@ import {
   Post
 } from "@nestjs/common";
 
-import { TagEntity } from "../entity/tag.entity";
 import { TagsService } from "../service/tags.service";
 
 @Controller("tags")
@@ -37,5 +36,10 @@ export class TagsController {
   @Delete("/:tagId")
   async deleteTag(@Param("tagId") tagId: number) {
     return this.tagService.deleteTag(tagId);
+  }
+
+  @Get("/articleCount")
+  async loadArticleCountWithTag() {
+    return this.tagService.getArticleCountWithTag();
   }
 }
