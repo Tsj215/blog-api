@@ -35,9 +35,4 @@ export class TagsService {
   async updateTag(tagId: number, tagName: string) {
     return this.tagRepository.update({ id: tagId }, { content: tagName });
   }
-
-  // 获取每个标签对应文章 id
-  async getArticleCountWithTag() {
-    return await this.tagRepository.find({ relations: ["articles"] });
-  }
 }

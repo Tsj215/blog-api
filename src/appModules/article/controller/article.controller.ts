@@ -56,11 +56,6 @@ export class ControllerController {
     this.articleService.addImageForArticle(articleId, imageList);
   }
 
-  @Get("count/createAt")
-  async loadCountOfArticleByCreateAt() {
-    return this.articleService.getCountOfArticleByCreateAt();
-  }
-
   @Post("save/image/:articleId")
   async saveImage(@Param("articleId") articleId, @Body() image) {
     return this.articleService.saveImage(articleId, image);

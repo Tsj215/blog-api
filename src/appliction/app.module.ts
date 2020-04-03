@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
+import { ArchiveModule } from "../appModules/archive/archive.module";
 import { ArticleModule } from "../appModules/article/article.module";
 import { MocloudModule } from "../appModules/mocloud/mocloud.module";
 import { TagsModule } from "../appModules/tags/tags.module";
@@ -15,7 +16,8 @@ import { AppService } from "./app.service";
     UserModule,
     TagsModule,
     MocloudModule,
-    ArticleModule
+    ArticleModule,
+    ArchiveModule
   ],
   controllers: [AppController],
   providers: [AppService]

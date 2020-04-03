@@ -37,9 +37,4 @@ export class TagsController {
   async deleteTag(@Param("tagId") tagId: number) {
     return this.tagService.deleteTag(tagId);
   }
-
-  @Get("/articleCount")
-  async loadArticleCountWithTag() {
-    return this.tagService.getArticleCountWithTag();
-  }
 }

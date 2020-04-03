@@ -189,18 +189,4 @@ export class ArticleService {
     const resp = await this.articleResponsitory.findOne(id);
     resp && this.articleResponsitory.remove(resp);
   }
-
-  /** 文章归档 */
-  async getCountOfArticleByCreateAt() {
-    const resp = await getRepository(ArticleEntity)
-      .createQueryBuilder("article")
-      .select([
-        `DATE_FORMAT(article.createAt,'%Y-%m') as 'date'`,
-        `count(1) as 'count'`
-      ])
-      .groupBy("date")
-      .getRawMany();
-
-    return resp;
-  }
 }
