@@ -28,7 +28,7 @@ export class ArticleService {
     const resp = await this.articleResponsitory.save(articleDto);
 
     if (!_.isEmpty(imageList)) {
-      const _imgList = imageList.map(i => {
+      const _imgList = imageList.map((i) => {
         const imageDto = new ImageEntity();
         imageDto.name = i.name;
         imageDto.url = i.url;
@@ -46,15 +46,15 @@ export class ArticleService {
   async addImageForArticle(articleId: number, imageList?: Image[]) {
     const article = await this.articleResponsitory.findOne({
       where: { id: articleId },
-      relations: ["images", "tags"]
+      relations: ["images", "tags"],
     });
 
     // 文章 images 不为空， 删除全部
 
     if (!_.isEmpty(imageList)) {
-      await this.imageResponsitory.delete(article.images.map(i => i.id));
+      await this.imageResponsitory.delete(article.images.map((i) => i.id));
 
-      const _imagList = (imageList || []).map(r => {
+      const _imagList = (imageList || []).map((r) => {
         const imageDto = new ImageEntity();
         imageDto.name = r.name;
         imageDto.url = r.url;
@@ -65,7 +65,7 @@ export class ArticleService {
 
       this.imageResponsitory.save(_imagList);
     } else if (_.isEmpty(imageList)) {
-      await this.imageResponsitory.delete(article.images.map(i => i.id));
+      await this.imageResponsitory.delete(article.images.map((i) => i.id));
     }
   }
 
@@ -73,7 +73,7 @@ export class ArticleService {
   async getArticleList(skip: number, take: number, article?: Article) {
     let filterParam: any = {
       title: _.get(article, "title"),
-      createAt: Between(_.get(article, "from"), _.get(article, "to"))
+      createAt: Between(_.get(article, "from"), _.get(article, "to")),
     };
 
     !_.get(article, "title") && (filterParam = _.omit(filterParam, "title"));
@@ -87,15 +87,15 @@ export class ArticleService {
       order:
         article.orderBy === "createAt"
           ? { createAt: "DESC" }
-          : { visitTimes: "DESC" }
+          : { visitTimes: "DESC" },
     });
 
     // 对 tag 进行筛选
     if (!_.isUndefined(article) && !_.isEmpty(article.tags)) {
-      const ids = article.tags.map(t => t.id);
+      const ids = article.tags.map((t) => t.id);
 
-      const finalResp = resp.filter(a => {
-        const _ids = a.tags.map(t => t.id);
+      const finalResp = resp.filter((a) => {
+        const _ids = a.tags.map((t) => t.id);
         return !_.isEmpty(_.intersection(ids, _ids));
       });
 
@@ -104,7 +104,7 @@ export class ArticleService {
 
     return {
       list: resp,
-      total: resp.length
+      total: resp.length,
     };
   }
 
@@ -117,20 +117,20 @@ export class ArticleService {
         take,
         skip: take * skip,
         relations: ["images", "tags"],
-        order: { createAt: "DESC" }
+        order: { createAt: "DESC" },
       });
     } else {
       resp = await this.articleResponsitory.findAndCount({
         take,
         skip: skip * take,
         relations: ["images", "tags"],
-        where: tags.map(t => ({ tags: Like(`%${t}%`) }))
+        where: tags.map((t) => ({ tags: Like(`%${t}%`) })),
       });
     }
 
     return {
       total: resp[1],
-      list: resp[0].map(r => ({ ...r, tags: _.split(r.tags, ",") }))
+      list: resp[0].map((r) => ({ ...r, tags: _.split(r.tags, ",") })),
     };
   }
 
@@ -138,7 +138,7 @@ export class ArticleService {
   async getArticleById(id: number) {
     const resp = await this.articleResponsitory.findOne({
       where: { id },
-      relations: ["images", "tags"]
+      relations: ["images", "tags"],
     });
 
     // 更新点击量
@@ -172,7 +172,7 @@ export class ArticleService {
   /** 更新文章 */
   async updateArticleById(id: number, article: Article) {
     const _article = await this.articleResponsitory.findOne(id, {
-      relations: ["images", "tags"]
+      relations: ["images", "tags"],
     });
 
     _article.title = article.title;

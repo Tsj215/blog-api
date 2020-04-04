@@ -1,0 +1,120 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta content="ie=edge" http-equiv="x-ua-compatible"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"><title>Awesome App</title><link href="/favicon.ico" rel="shortcut icon"><meta content="width=device-width,initial-scale=1" name="viewport"><link href="/vendors.css" rel="stylesheet"><link href="/index.css" rel="stylesheet"><script src="https://as.alipayobjects.com/g/component/fastclick/1.0.6/fastclick.js"></script><script>if ('addEventListener' in document) {
+        document.addEventListener('DOMContentLoaded', function () {
+          FastClick.attach(document.body);
+        }, false);
+      }
+      if (!window.Promise) {
+        document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"' +
+          '>' + '<' + '/' + 'script>');
+      }</script><style>#root,
+      body,
+      html {
+        height: 100%
+      }
+
+      .async_script {
+        display: none
+      }
+
+      .loader,
+      .loader:after,
+      .loader:before {
+        background: #ed8c3d;
+        -webkit-animation: load1 1s infinite ease-in-out;
+        animation: load1 1s infinite ease-in-out;
+        width: 1em;
+        height: 4em
+      }
+
+      .loader {
+        top: 35%;
+        color: #fff;
+        text-indent: -9999em;
+        margin: 88px auto;
+        position: relative;
+        font-size: 11px;
+        -webkit-transform: translateZ(0);
+        -ms-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-animation-delay: -.16s;
+        animation-delay: -.16s
+      }
+
+      .loader:after,
+      .loader:before {
+        position: absolute;
+        top: 0;
+        content: ''
+      }
+
+      .loader:before {
+        left: -1.5em;
+        -webkit-animation-delay: -.32s;
+        animation-delay: -.32s
+      }
+
+      .loader:after {
+        left: 1.5em
+      }
+
+      @-webkit-keyframes load1 {
+
+        0%,
+        100%,
+        80% {
+          box-shadow: 0 0;
+          height: 4em
+        }
+
+        40% {
+          box-shadow: 0 -2em;
+          height: 5em
+        }
+      }
+
+      @keyframes load1 {
+
+        0%,
+        100%,
+        80% {
+          box-shadow: 0 0;
+          height: 4em
+        }
+
+        40% {
+          box-shadow: 0 -2em;
+          height: 5em
+        }
+      }</style><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"><link rel="shortcut icon" href="/favicon.ico"><link href="/vendors.css" rel="stylesheet"><link href="/index.css" rel="stylesheet"></head><body><div id="root"></div><script src="/runtime.62e4a0e42fe5c3625c47.js"></script><script src="/vendors.e728c3da5bf050a252e0.js"></script><script src="/index.2c7b062cbb48e71bb305.js"></script></body><script>function loadScript(src, cb) {
+    //创建一个script元素
+    var el = document.createElement('script');
+    var loaded = false;
+    //设置加载完成的回调事件
+    el.onload = el.onreadystatechange = function () {
+      //防止重复加载
+      if ((el.readyState && el.readyState !== 'complete' && el.readyState !== 'loaded') || loaded) {
+        return false;
+      }
+      //加载完成后将该脚本的onload设置为null
+      el.onload = el.onreadystatechange = null;
+      loaded = true;
+      cb && cb();
+    };
+    el.async = true;
+    el.src = src;
+    var body = document.getElementsByTagName('body')[0];
+    body.appendChild(el);
+  }
+  window.onload = function () {
+    var scripts = [];
+    [].forEach.call(document.getElementsByClassName('async_script'), function (a) {
+      scripts.push(a.getAttribute('href'));
+    });
+    for (var i = 0; i < scripts.length; i++) {
+      (function (j) {
+        setTimeout(function () {
+          loadScript(scripts[j]);
+        }, j * 500);
+      }(i));
+    }
+  }</script></html>

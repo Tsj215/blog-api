@@ -1,5 +1,7 @@
 import { Module } from "@nestjs/common";
+import { ServeStaticModule } from "@nestjs/serve-static";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { join } from "path";
 
 import { ArchiveModule } from "../appModules/archive/archive.module";
 import { ArticleModule } from "../appModules/article/article.module";
@@ -13,13 +15,14 @@ import { AppService } from "./app.service";
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
+    ServeStaticModule.forRoot({ rootPath: join(__dirname, "..", "blog") }),
     UserModule,
     TagsModule,
     MocloudModule,
     ArticleModule,
-    ArchiveModule
+    ArchiveModule,
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [AppService],
 })
 export class AppModule {}

@@ -1439,6 +1439,13 @@
     "@angular-devkit/schematics" "7.3.8"
     fs-extra "8.1.0"
 
+"@nestjs/serve-static@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/serve-static/-/serve-static-2.1.0.tgz#fe2955d8d176674046d2eb16724803ca409384d3"
+  integrity sha512-syC7x3vacNYOAqpITqiPd7NS0gAc3IbzexyMOpUu00mVt/8NZc3zXNEV5r4DeatRKUwc11tt1TRlMEsmTLTQIA==
+  dependencies:
+    path-to-regexp "0.1.7"
+
 "@nestjs/swagger@^4.1.10":
   version "4.1.10"
   resolved "https://registry.yarnpkg.com/@nestjs/swagger/-/swagger-4.1.10.tgz#1c85563e3c98c58017ec04aaed291c23a760de79"
@@ -5127,10 +5134,10 @@ date-fns@^1.27.2:
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.30.1.tgz#2e71bf0b119153dbb4cc4e88d9ea5acfb50dc05c"
   integrity sha512-hBSVCvSmWC+QypYObzwGOd9wqdDpOt+0wl0KbU+R+uuZBS1jN8VsD1ss3irQDknRj5NvxiTF6oj/nDRnN/UQNw==
 
-dayjs@^1.8.21:
-  version "1.8.21"
-  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.21.tgz#98299185b72b9b679f31c7ed987b63923c961552"
-  integrity sha512-1kbWK0hziklUHkGgiKr7xm59KwAg/K3Tp7H/8X+f58DnNCwY3pKYjOCJpIlVs125FRBukGVZdKZojC073D0IeQ==
+dayjs@^1.8.23:
+  version "1.8.23"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.23.tgz#07b5a8e759c4d75ae07bdd0ad6977f851c01e510"
+  integrity sha512-NmYHMFONftoZbeOhVz6jfiXI4zSiPN6NoVWJgC0aZQfYVwzy/ZpESPHuCcI0B8BUMpSJQ08zenHDbofOLKq8hQ==
 
 debug@*, debug@4, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
   version "4.1.1"
