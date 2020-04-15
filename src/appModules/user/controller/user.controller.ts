@@ -6,7 +6,7 @@ import {
   HttpException,
   Param,
   Patch,
-  Post
+  Post,
 } from "@nestjs/common";
 
 import { LoginUserDto } from "../dto";
@@ -59,5 +59,10 @@ export class UserController {
   @Delete("delete/:key")
   async deleteFileByKey(@Param("key") key: string) {
     return this.qiniuService.deleteFileByKeys(key);
+  }
+
+  @Get("photoGallery/:prefix")
+  async loadPhotoGallery(@Param("prefix") prefix: string) {
+    return this.qiniuService.getFileListByPrefix(prefix);
   }
 }
