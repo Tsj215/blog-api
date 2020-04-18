@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import * as _ from "lodash";
 import * as qiniu from "qiniu";
 
 import nliConfig from "./nli.config.js";
@@ -55,7 +56,7 @@ export class QiniuService {
     });
   }
 
-  // 获取指定前缀文件列表
+  // 获取指定前缀文件列表并连接 profile
   async getFileListByPrefix(prefix: string) {
     const { bucket, accessKey, secretKey } = nliConfig;
     const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
@@ -65,14 +66,12 @@ export class QiniuService {
 
     const bucketManager = new qiniu.rs.BucketManager(mac, config);
 
-    const callback = (err, resBody, respInfo) => {
+    const callback = async (err, resBody, respInfo) => {
       if (err) {
         throw err;
       }
       if (respInfo.statusCode == "200") {
         const keys = resBody.items.map((i) => i.key);
-
-        console.log("prefix", keys);
       }
     };
 

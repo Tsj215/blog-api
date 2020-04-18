@@ -65,4 +65,12 @@ export class UserController {
   async loadPhotoGallery(@Param("prefix") prefix: string) {
     return this.qiniuService.getFileListByPrefix(prefix);
   }
+
+  @Post("addPhoto")
+  async addPhotoForProfile(
+    @Body("name") name: string,
+    @Body("url") url: string
+  ) {
+    this.userService.addPhoto(name, url);
+  }
 }
