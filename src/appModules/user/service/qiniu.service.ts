@@ -77,4 +77,23 @@ export class QiniuService {
 
     bucketManager.listPrefix(bucket, options, callback);
   }
+
+  // 批量删除文件
+  async deleteBatch(names: string[]) {
+    const { bucket, accessKey, secretKey } = nliConfig;
+    const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+    const config = new qiniu.conf.Config();
+
+    const bucketManager = new qiniu.rs.BucketManager(mac, config);
+
+    const deleteOperations = (names || []).map((n) =>
+      qiniu.rs.deleteOp(bucket, n)
+    );
+
+    bucketManager.batch(deleteOperations, (err, respBody, respInfo) => {
+      if (err) {
+        throw err;
+      }
+    });
+  }
 }

@@ -9,9 +9,12 @@ import { PhotoGalleryEntity } from "../entity/photoGallery.entity";
 import { ProfileEntity } from "../entity/profile.entity";
 import { UserEntity } from "../entity/user.entity";
 
+import { QiniuService } from "./qiniu.service";
+
 @Injectable()
 export class UserService {
   constructor(
+    protected readonly qiniuService: QiniuService,
     @InjectRepository(ProfileEntity)
     private readonly profileRepository: Repository<ProfileEntity>,
     @InjectRepository(UserEntity)
@@ -38,17 +41,21 @@ export class UserService {
     return resp;
   }
 
-  async addPhoto(name: string, url: string) {
+  async addPhoto(name: string, url: string, width: number, heigth: number) {
     const profile = await this.profileRepository.findOne({ id: 1 });
 
     const photoDto = new PhotoGalleryEntity();
-    photoDto.name = name;
     photoDto.url = url;
+    photoDto.name = name;
+    photoDto.width = width;
+    photoDto.height = heigth;
     photoDto.profile = profile;
-    photoDto.width = _.random(1, 4);
-    photoDto.height = _.random(1, 4);
 
     this.photoResponsitory.save(photoDto);
+  }
+
+  async deletePhoto(ids: number[]) {
+    return await this.photoResponsitory.delete(ids);
   }
 
   public generateJWT(user) {

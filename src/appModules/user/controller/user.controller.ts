@@ -69,8 +69,21 @@ export class UserController {
   @Post("addPhoto")
   async addPhotoForProfile(
     @Body("name") name: string,
-    @Body("url") url: string
+    @Body("url") url: string,
+    @Body("width") width: number,
+    @Body("height") height: number
   ) {
-    this.userService.addPhoto(name, url);
+    this.userService.addPhoto(name, url, width, height);
+  }
+
+  @Delete("deletePhotos")
+  async deletePhotos(
+    @Body("ids") ids: number[],
+    @Body("names") names: string[]
+  ) {
+    const resp = await this.userService.deletePhoto(ids);
+    const _resp = await this.qiniuService.deleteBatch(names);
+
+    return resp && _resp;
   }
 }
