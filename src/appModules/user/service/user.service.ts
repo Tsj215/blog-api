@@ -24,10 +24,12 @@ export class UserService {
   ) {}
 
   async getProfileById(id: number) {
-    return this.profileRepository.findOne({
+    const resp = await this.profileRepository.findOne({
       where: { id },
       relations: ["photos"],
     });
+
+    return { ...resp, photos: _.reverse(resp.photos) };
   }
 
   async updateProfile(profile: Partial<ProfileDto>) {
