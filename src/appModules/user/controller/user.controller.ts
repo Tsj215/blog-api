@@ -37,7 +37,7 @@ export class UserController {
 
     const errors = "User not found";
 
-    if (!_user) throw new HttpException({ errors }, 500);
+    if (!_user) throw new HttpException({ errors }, 401);
 
     const token = await this.userService.generateJWT(_user);
     const { username, password } = _user;
