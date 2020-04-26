@@ -15,7 +15,9 @@ import { AppService } from "./app.service";
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
-    ServeStaticModule.forRoot({ rootPath: join(__dirname, "..", "blog") }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, "..", "blog"),
+    }),
     UserModule,
     TagsModule,
     MocloudModule,
