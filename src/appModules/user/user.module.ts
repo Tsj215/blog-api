@@ -1,5 +1,7 @@
 import { Module } from "@nestjs/common";
+import { ServeStaticModule } from "@nestjs/serve-static";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { join } from "path";
 
 import { UserController } from "./controller/user.controller";
 import { PhotoGalleryEntity } from "./entity/photoGallery.entity";
@@ -10,6 +12,10 @@ import { UserService } from "./service/user.service";
 
 @Module({
   imports: [
+    TypeOrmModule.forRoot(),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, "../..", "blog/hexo"),
+    }),
     TypeOrmModule.forFeature([ProfileEntity, UserEntity, PhotoGalleryEntity]),
   ],
   controllers: [UserController],
