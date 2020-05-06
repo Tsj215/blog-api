@@ -16,7 +16,7 @@ import { AppService } from "./app.service";
   imports: [
     TypeOrmModule.forRoot(),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, "..", "blog/rtw"),
+      rootPath: join(__dirname, "..", "blog"),
     }),
     UserModule,
     TagsModule,
