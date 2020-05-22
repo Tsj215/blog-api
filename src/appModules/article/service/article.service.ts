@@ -79,7 +79,7 @@ export class ArticleService {
     !_.get(article, "title") && (filterParam = _.omit(filterParam, "title"));
     !_.get(article, "from") && (filterParam = _.omit(filterParam, "createAt"));
 
-    const resp = await this.articleResponsitory.find({
+    const resp = await this.articleResponsitory.findAndCount({
       take,
       skip: skip * take,
       where: filterParam,
@@ -90,21 +90,23 @@ export class ArticleService {
           : { visitTimes: "DESC" },
     });
 
+    console.log("resp", resp);
+
     // 对 tag 进行筛选
     if (!_.isUndefined(article) && !_.isEmpty(article.tags)) {
       const ids = article.tags.map((t) => t.id);
 
-      const finalResp = resp.filter((a) => {
+      const finalResp = resp[0].filter((a) => {
         const _ids = a.tags.map((t) => t.id);
         return !_.isEmpty(_.intersection(ids, _ids));
       });
 
-      return { list: finalResp, total: finalResp.length };
+      return { list: finalResp, total: resp[1] };
     }
 
     return {
-      list: resp,
-      total: resp.length,
+      list: resp[0],
+      total: resp[1],
     };
   }
 
