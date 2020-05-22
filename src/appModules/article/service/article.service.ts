@@ -101,7 +101,7 @@ export class ArticleService {
         return !_.isEmpty(_.intersection(ids, _ids));
       });
 
-      return { list: finalResp, total: resp[1] };
+      return { list: finalResp, total: finalResp.length };
     }
 
     return {
